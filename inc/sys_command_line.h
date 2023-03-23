@@ -20,6 +20,8 @@
 #include "sys_queue.h"
 #include "vt100.h"
 
+_BEGIN_STD_C
+
 /*
  *  Macro config
  */
@@ -115,6 +117,8 @@ void 		cli_init(UART_HandleTypeDef *handle_uart);
 void 		cli_run(void);
 
 void 		cli_add_command(const char *command, const char *help, uint8_t (*exec)(int argc, char *argv[]));
+
+_END_STD_C
 
 #endif /* __SYS_COMMAND_LINE_H */
 

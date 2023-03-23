@@ -9,6 +9,7 @@
 
 #ifndef SHELL_INC_VT100_H_
 #define SHELL_INC_VT100_H_
+_BEGIN_STD_C
 
 #define KEY_UP              "\x1b\x5b\x41"  /* [up] key: 0x1b 0x5b 0x41 */
 #define KEY_DOWN            "\x1b\x5b\x42"  /* [down] key: 0x1b 0x5b 0x42 */
@@ -189,4 +190,5 @@ enum {
 
 /* terminal display-------------------------------------------------------END */
 
+_END_STD_C
 #endif /* SHELL_INC_VT100_H_ */
