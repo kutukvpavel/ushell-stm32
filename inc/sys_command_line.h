@@ -44,7 +44,7 @@ _BEGIN_STD_C
 #define ERR(fmt, ...)  do {												\
                             fprintf(stderr,								\
 								CLI_FONT_RED							\
-								"[ERROR] %s:%d: "fmt					\
+								"[ERROR] %s:%d: " fmt					\
 								CLI_FONT_DEFAULT,						\
                                 __FILE__, __LINE__, ##__VA_ARGS__);		\
                         }while(0)
@@ -52,7 +52,7 @@ _BEGIN_STD_C
 #define LOG(LOG_CAT, fmt, ...)											\
 						if((1<<LOG_CAT)&cli_log_stat) {					\
                             printf(CLI_FONT_CYAN						\
-								"[%s]: "fmt								\
+								"[%s]: " fmt								\
 								CLI_FONT_DEFAULT,						\
 								cli_logs_names[LOG_CAT],				\
 								##__VA_ARGS__);							\
@@ -60,7 +60,7 @@ _BEGIN_STD_C
 
 #define DBG(fmt, ...)  do {												\
                             printf(CLI_FONT_YELLOW						\
-							"[Debug] %s:%d: "fmt						\
+							"[Debug] %s:%d: " fmt						\
 							CLI_FONT_DEFAULT,							\
                                 __FILE__, __LINE__, ##__VA_ARGS__);		\
                         } while(0)
@@ -69,7 +69,7 @@ _BEGIN_STD_C
                             TERMINAL_FONT_RED();						\
                             TERMINAL_HIGHLIGHT();						\
                             fprintf(stderr,								\
-								"### DIE ### %s:%d: "fmt,				\
+								"### DIE ### %s:%d: " fmt,				\
                                 __FILE__, __LINE__, ##__VA_ARGS__);		\
                         } while(1) /* infinite loop */
 
