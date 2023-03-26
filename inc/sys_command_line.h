@@ -44,7 +44,7 @@ _BEGIN_STD_C
 #define ERR(fmt, ...)  do {												\
                             fprintf(stderr,								\
 								CLI_FONT_RED							\
-								"[ERROR] %s:%d: " fmt					\
+								"[ERROR] %s:%d: " fmt	"\n"				\
 								CLI_FONT_DEFAULT,						\
                                 __FILE__, __LINE__, ##__VA_ARGS__);		\
                         }while(0)
@@ -52,7 +52,7 @@ _BEGIN_STD_C
 #define LOG(LOG_CAT, fmt, ...)											\
 						if((1<<LOG_CAT)&cli_log_stat) {					\
                             printf(CLI_FONT_CYAN						\
-								"[%s]: " fmt								\
+								"[%s]: " fmt	"\n"							\
 								CLI_FONT_DEFAULT,						\
 								cli_logs_names[LOG_CAT],				\
 								##__VA_ARGS__);							\
@@ -60,7 +60,7 @@ _BEGIN_STD_C
 
 #define DBG(fmt, ...)  do {												\
                             printf(CLI_FONT_YELLOW						\
-							"[Debug] %s:%d: " fmt						\
+							"[Debug] %s:%d: " fmt	"\n"					\
 							CLI_FONT_DEFAULT,							\
                                 __FILE__, __LINE__, ##__VA_ARGS__);		\
                         } while(0)
@@ -81,9 +81,9 @@ _BEGIN_STD_C
 #define XSTRING(s) STRING(s)
 
 #ifdef CLI_NAME
-#define PRINT_CLI_NAME()	do { printf(CLI_FONT_DEFAULT"\n"XSTRING(CLI_NAME)"$ "); } while(0)
+#define PRINT_CLI_NAME()	do { printf(CLI_FONT_DEFAULT "\n" XSTRING(CLI_NAME) "$ "); } while(0)
 #else
-#define PRINT_CLI_NAME()	do { printf(CLI_FONT_DEFAULT"\n#$ "); } while(0)
+#define PRINT_CLI_NAME()	do { printf(CLI_FONT_DEFAULT "\n#$ "); } while(0)
 #endif
 enum cli_log_categories {
 	CLI_LOG_SHELL = 0,
