@@ -296,7 +296,9 @@ void cli_init(UART_HandleTypeDef *handle_uart)
 /*
  * Callback function for UART IRQ when it is done receiving a char
  */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart){
+void cli_uart_rxcplt_callback(UART_HandleTypeDef * huart){
+    if (huart != huart_shell) return;
+
 	shell_queue_in(&cli_rx_buff, &cBuffer);
 	HAL_UART_Receive_IT(huart, &cBuffer, 1);
 }
@@ -304,7 +306,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart){
 /*
  * Callback function for UART IRQ when it is done transmitting data
  */
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef * huart){
+void cli_uart_txcplt_callback(UART_HandleTypeDef * huart){
+    if (huart != huart_shell) return;
+    
 	cli_tx_isr_flag = false;
 }
 

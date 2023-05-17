@@ -118,6 +118,9 @@ void 		cli_run(void);
 
 void 		cli_add_command(const char *command, const char *help, uint8_t (*exec)(int argc, char *argv[]));
 
+void    cli_uart_rxcplt_callback(UART_HandleTypeDef * huart);
+void    cli_uart_txcplt_callback(UART_HandleTypeDef * huart);
+
 _END_STD_C
 
 #endif /* __SYS_COMMAND_LINE_H */
