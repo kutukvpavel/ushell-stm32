@@ -17,6 +17,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "../inc/sys_command_line.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
 
 /*******************************************************************************
  *
@@ -89,6 +92,9 @@ const char				cli_log_help[]				= "Controls which logs are displayed."
 bool 					cli_password_ok 			= false;
 volatile bool			cli_tx_isr_flag				= false; /*< This flag is used internally so that _write will not write text in the console if the previous call is not over yet */
 
+static StaticSemaphore_t cli_tx_smphr;
+static SemaphoreHandle_t cli_tx_smphr_handle = NULL;
+
 /*******************************************************************************
  *
  * 	Internal functions declaration
@@ -128,8 +134,13 @@ int _write(int file, char *data, int len){
 
 	HAL_StatusTypeDef status = HAL_OK;
 
-	if (!(SCB->ICSR & SCB_ICSR_VECTACTIVE_Msk) ) {
-		cli_tx_isr_flag = true;
+	if (xPortIsInsideInterrupt() == pdFALSE) {
+        /*while (cli_tx_isr_flag) {
+            vTaskDelay(2);
+        }*/
+        while (xSemaphoreTake(cli_tx_smphr_handle, portMAX_DELAY) != pdTRUE) vTaskDelay(1);
+
+		cli_tx_isr_flag = true; //Acts as a single-thread semaphore
 		/* Disable interrupts to prevent UART from throwing an RX interrupt while the peripheral is locked as
 		 * this would prevent the RX interrupt from restarting HAL_UART_Receive_IT  */
 		HAL_NVIC_DisableIRQ(USART1_IRQn);
@@ -141,17 +152,18 @@ int _write(int file, char *data, int len){
 		HAL_NVIC_EnableIRQ(USART1_IRQn);
 
 		/* Wait for the transfer to terminate*/
-		while(cli_tx_isr_flag == true){
+		while(cli_tx_isr_flag == true) {
 			/* flag will be set to false in HAL_UART_TxCpltCallback*/
+            //vTaskDelay(1);
 		}
+
+        xSemaphoreGive(cli_tx_smphr_handle);
 	}else{
 		/* We are called from an interrupt, using Transmit_IT would not work */
 		HAL_NVIC_DisableIRQ(USART1_IRQn);
 		status = HAL_UART_Transmit(huart_shell, (uint8_t *)data, len, 1000);
 		HAL_NVIC_EnableIRQ(USART1_IRQn);
 	}
-
-
 
 	if(status == HAL_OK){
 		return len;
@@ -264,6 +276,8 @@ static uint8_t cli_history_show(uint8_t mode, char** p_history)
 void cli_init(UART_HandleTypeDef *handle_uart)
 {
 	huart_shell = handle_uart;
+    cli_tx_smphr_handle = xSemaphoreCreateMutexStatic(&cli_tx_smphr);
+    assert_param(cli_tx_smphr_handle);
 	shell_queue_init(&cli_rx_buff);
     memset((uint8_t *)&history, 0, sizeof(history));
 
