@@ -514,13 +514,6 @@ void cli_run(void)
 }
 
 void greet(void){
-    NL1();
-    TERMINAL_BACK_DEFAULT(); /* set terminal background color: black */
-    TERMINAL_DISPLAY_CLEAR();
-    TERMINAL_RESET_CURSOR();
-    TERMINAL_FONT_BLUE();
-    printf("-------------------------------");
-    NL2();
     TERMINAL_FONT_DEFAULT();
     PRINT_CLI_NAME();
     TERMINAL_SHOW_CURSOR();
