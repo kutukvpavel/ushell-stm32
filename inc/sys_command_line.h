@@ -26,10 +26,10 @@ _BEGIN_STD_C
  *  Macro config
  */
 #define CLI_ENABLE          true            	/* command line enable/disable */
-#define HISTORY_MAX         10                  /* maximum number of history command */
+#define HISTORY_MAX         8                  /* maximum number of history command */
 #define MAX_COMMAND_NB		32
-#define MAX_ARGC			8
-#define MAX_LINE_LEN 		80
+#define MAX_ARGC			4
+#define MAX_LINE_LEN 		40
 
 #ifndef CLI_DISABLE
     #define CLI_INIT(...)       cli_init(__VA_ARGS__)
