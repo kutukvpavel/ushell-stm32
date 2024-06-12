@@ -27,7 +27,7 @@ _BEGIN_STD_C
  */
 #define CLI_ENABLE          true            	/* command line enable/disable */
 #define HISTORY_MAX         8                  /* maximum number of history command */
-#define MAX_COMMAND_NB		32
+#define MAX_COMMAND_NB		16
 #define MAX_ARGC			4
 #define MAX_LINE_LEN 		40
 
